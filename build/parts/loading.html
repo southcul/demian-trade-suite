@@ -1,0 +1,77 @@
+  <!-- ================= 工作区：装柜计算 ================= -->
+  <section class="lg-workspace" id="lgWorkspace" aria-label="装柜计算">
+    <div class="lg-head">
+      <div class="lg-head-left">
+        <h2 class="lg-title">装柜计算<small>CONTAINER LOADING</small></h2>
+        <div class="lg-tabs" id="lgTabs">
+          <button class="lg-tab is-on" data-tab="container">集装箱</button>
+          <button class="lg-tab" data-tab="truck">厢式货车</button>
+        </div>
+      </div>
+      <div class="lg-head-right">
+        <button class="lg-btn" id="lgBtnPickDocs" title="读取「外贸单证」货物明细，按箱规反算体积与毛净重">从单证取货</button>
+        <button class="lg-btn" id="lgBtnDemo">载入示例</button>
+        <button class="lg-btn lg-btn-primary" id="lgBtnToDocs">生成单据 →</button>
+      </div>
+    </div>
+
+    <div class="lg-body">
+      <aside class="lg-left">
+        <div class="lg-scroll" id="lgScroll">
+          <div class="lg-block">
+            <div class="lg-block-head"><span><i>01</i>柜型 / 车型</span><small id="lgVsub">标准柜 · 内尺寸</small></div>
+            <div class="lg-vehicles" id="lgVehicles"></div>
+            <div class="lg-vinfo" id="lgVinfo"></div>
+          </div>
+
+          <div class="lg-block">
+            <div class="lg-block-head"><span><i>02</i>货物明细</span><small>按外箱 / 整托填报</small></div>
+            <div id="lgCargoList"></div>
+            <button class="lg-add" id="lgAddCargo"><b>+</b> 添加另一种货物</button>
+          </div>
+        </div>
+        <div class="lg-foot">
+          <button class="lg-calc" id="lgCalc"><span>开始计算</span><small>重新排布并校验</small></button>
+        </div>
+      </aside>
+
+      <div class="lg-right">
+        <div class="lg-stats">
+          <div class="lg-stat" id="lgCardVol"><span>货物体积</span><b id="lgStatVol">0.00</b><i>CBM</i></div>
+          <div class="lg-stat" id="lgCardGw"><span>总毛重</span><b id="lgStatGw">0.00</b><i>KG</i></div>
+          <div class="lg-stat" id="lgCardUse"><span>空间利用率</span><b id="lgStatUse">0.00</b><i>%</i></div>
+          <div class="lg-stat" id="lgCardQty"><span>装载进度</span><b id="lgStatQty">0 / 0</b><i>箱</i></div>
+          <div class="lg-stat" id="lgCardSat"><span>重量饱和度</span><b id="lgStatSat">0.00</b><i>%</i></div>
+          <div class="lg-stat" id="lgCardRemain"><span>剩余载重</span><b id="lgStatRemain">0.00</b><i>KG</i></div>
+          <div class="lg-stat" id="lgCardCg"><span>重心横向偏移</span><b id="lgStatCg">0.00</b><i>%</i></div>
+          <div class="lg-stat" id="lgCardPress"><span>底层最大压强</span><b id="lgStatPress">0.00</b><i>kPa</i></div>
+        </div>
+
+        <div class="lg-est-strip">
+          <span id="lgEst">—</span>
+          <span id="lgTip" class="lg-tip"></span>
+        </div>
+
+        <div class="lg-stage" id="lgStage">
+          <canvas id="lgCanvas"></canvas>
+          <div class="lg-empty" id="lgEmpty">
+            <b>填好货物，按「开始计算」</b>
+            <span>按 6 向最大空长方体排布，校验支撑、承压、堆层与重心</span>
+          </div>
+          <div class="lg-tools">
+            <button data-tool="print" title="打印装柜方案 / 导出 PDF">⎙</button>
+            <button data-tool="transparent" title="透明模式">◐</button>
+            <button data-tool="in" title="放大">+</button>
+            <button data-tool="out" title="缩小">−</button>
+            <button data-tool="fit" title="重置视图">⟳</button>
+          </div>
+          <div class="lg-legend" id="lgLegend"></div>
+        </div>
+
+        <div class="lg-steps">
+          <div class="lg-steps-head"><span>装载步骤</span><small id="lgStepCount">—</small></div>
+          <div class="lg-steps-list" id="lgSteps"><div class="lg-steps-empty">计算后显示逐箱坐标与层数</div></div>
+        </div>
+      </div>
+    </div>
+  </section>

@@ -1,0 +1,97 @@
+{
+  "doc_type": "PROFORMA INVOICE",
+  "doc_types": [
+    "PROFORMA INVOICE",
+    "COMMERCIAL INVOICE",
+    "PACKING LIST"
+  ],
+  "date": "2026-10-31",
+  "ref_no": "",
+  "validity_days": 15,
+  "currency": "USD",
+  "exchange_rate": 7.2,
+  "term": "CIF",
+  "seller": {
+    "name": "SHENZHEN SAMPLE TECHNOLOGY CO., LTD.",
+    "address": "Room 1201, Building A, Hi-Tech Park, Nanshan District, Shenzhen, China | sales@example.com",
+    "tax_no": "91440300MA5DEMO123",
+    "bank": {
+      "name": "Bank of China, Shenzhen Nanshan Branch",
+      "account": "7643 2100 8899 0012",
+      "swift": "BKCHCNBJ45A",
+      "address": "No. 88 Keyuan Road, Nanshan District, Shenzhen, China",
+      "intermediary": "CITIBANK N.A., NEW YORK / SWIFT: CITIUS33"
+    }
+  },
+  "buyer": {
+    "company": "HAMBURG HOME IMPORTS GMBH",
+    "address": "Grosse Elbstrasse 145, 22767 Hamburg, Germany",
+    "attn": "Purchasing Department",
+    "consignee": "HAMBURG HOME IMPORTS GMBH",
+    "notify": "SAME AS CONSIGNEE"
+  },
+  "trade": {
+    "pol": "Shenzhen, China",
+    "pod": "Hamburg, Germany",
+    "dest_country": "Germany",
+    "origin": "China",
+    "payment": "30% T/T deposit, balance against copy of B/L",
+    "lead_time": "Lead Time: 30 days after deposit received",
+    "vessel": "MSC ANNA / V.024W",
+    "bl_no": "",
+    "shipment_date": "Within 30 days after deposit",
+    "contract_no": "",
+    "sign_place": "Shenzhen, China",
+    "partial": "not_allowed",
+    "arbitration": "CIETAC, Shenzhen, in accordance with its rules.",
+    "marks": "HHI GMBH\nORDER NO. 2026-1188\nHAMBURG\nMADE IN CHINA",
+    "pallet_info": "1 × 40'HQ / 400 CTNS / 30.18 CBM"
+  },
+  "items": [
+    {
+      "name": "Smart Watch X1",
+      "hs_code": "8517620000",
+      "unit": "PCS",
+      "qty": 3000,
+      "unit_price_cny": 150,
+      "pcs_per_ctn": 20,
+      "gross_weight": 0.75,
+      "net_weight": 0.7,
+      "ctn_l": 46,
+      "ctn_w": 32,
+      "ctn_h": 28
+    },
+    {
+      "name": "Bluetooth Speaker S2",
+      "hs_code": "8518220000",
+      "unit": "PCS",
+      "qty": 2500,
+      "unit_price_cny": 210,
+      "pcs_per_ctn": 10,
+      "gross_weight": 2.4,
+      "net_weight": 2.2,
+      "ctn_l": 60,
+      "ctn_w": 40,
+      "ctn_h": 40
+    }
+  ],
+  "costs": {
+    "vat_rate": 13,
+    "refund_rate": 13,
+    "margin_rate": 20,
+    "bank_fee": 500,
+    "domestic_fee": 1500,
+    "domestic_alloc": "qty",
+    "freight_mode": "sea_fcl",
+    "intl_freight": 8000,
+    "insurance": 200,
+    "air_dim_factor": 167,
+    "discount": 0,
+    "price_precision": 0.05
+  },
+  "options": {
+    "doc_lang": "en",
+    "theme": "classic",
+    "bilingual": false
+  }
+}

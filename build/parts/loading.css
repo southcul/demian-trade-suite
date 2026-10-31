@@ -1,0 +1,258 @@
+/* ==========================================================================
+   工作台导航 + 装柜计算模块（lg- 前缀，避免与单证模块样式冲突）
+   ========================================================================== */
+.ws-hidden { display: none !important; }
+
+.ws-nav {
+  height: 46px; flex-shrink: 0; display: flex; align-items: center; gap: 24px;
+  padding: 0 18px; background: var(--ink); color: #f3f1ec; position: relative; z-index: 60;
+}
+.ws-brand { display: flex; align-items: center; gap: 9px; min-width: 214px; }
+.ws-mark {
+  width: 24px; height: 24px; flex-shrink: 0; background: var(--primary); color: #fff;
+  display: grid; place-items: center; font: 700 13px/1 var(--font-num); border-radius: 2px;
+}
+.ws-brand-text b { display: block; font-size: 12.5px; letter-spacing: .2px; font-weight: 600; }
+.ws-brand-text small { display: block; font-size: 7.5px; letter-spacing: 1.5px; color: #888d94; margin-top: 1px; }
+.ws-tabs { display: flex; gap: 2px; height: 100%; }
+.ws-tab {
+  background: none; border: 0; color: #a8adb4; padding: 0 17px; height: 100%;
+  font: 600 12.5px/1 inherit; cursor: pointer; position: relative; display: flex; align-items: center; gap: 7px;
+  font-family: inherit;
+}
+.ws-tab span { font-size: 7.5px; letter-spacing: 1.2px; color: #6f747b; font-weight: 500; }
+.ws-tab:hover { color: #fff; }
+.ws-tab.is-on { color: #fff; background: rgba(255, 255, 255, .05); }
+.ws-tab.is-on::after { content: ''; position: absolute; left: 12px; right: 12px; bottom: 0; height: 2px; background: var(--primary); }
+.ws-tab.is-on span { color: #e08a80; }
+.ws-meta { margin-left: auto; display: flex; align-items: center; gap: 7px; font-size: 10.5px; color: #8b8f95; }
+.ws-live { width: 5px; height: 5px; border-radius: 50%; background: #3fae76; box-shadow: 0 0 0 3px rgba(63, 174, 118, .15); }
+
+/* ---------- 装柜工作区骨架 ---------- */
+.lg-workspace { flex: 1; min-height: 0; display: flex; flex-direction: column; background: var(--bg); color: var(--text-main); }
+.lg-head {
+  height: 52px; flex-shrink: 0; display: flex; align-items: center; justify-content: space-between;
+  gap: 14px; padding: 0 16px; background: #fff; border-bottom: 1px solid var(--border);
+}
+.lg-head-left { display: flex; align-items: center; gap: 18px; min-width: 0; }
+.lg-title { margin: 0; font-size: 15px; font-weight: 700; letter-spacing: .3px; display: flex; align-items: baseline; gap: 8px; white-space: nowrap; }
+.lg-title small { font-size: 7.5px; letter-spacing: 1.6px; color: var(--text-sub); font-weight: 600; }
+.lg-tabs { display: flex; border: 1px solid var(--border); background: #f7f6f3; padding: 2px; gap: 2px; border-radius: 2px; }
+.lg-tab { border: 0; background: none; padding: 5px 14px; font-size: 11.5px; font-weight: 600; color: var(--text-sub); cursor: pointer; border-radius: 1px; font-family: inherit; }
+.lg-tab.is-on { background: var(--ink); color: #fff; }
+.lg-head-right { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
+.lg-btn {
+  border: 1px solid var(--border); background: #fff; color: var(--text-sub); padding: 7px 11px;
+  font-size: 11px; font-weight: 600; cursor: pointer; border-radius: 2px; font-family: inherit; white-space: nowrap;
+}
+.lg-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+.lg-btn-primary { background: var(--primary); border-color: var(--primary); color: #fff; }
+.lg-btn-primary:hover { background: var(--primary-dark); border-color: var(--primary-dark); color: #fff; }
+
+.lg-body { flex: 1; min-height: 0; display: flex; }
+.lg-left { width: 424px; flex-shrink: 0; background: #fff; border-right: 1px solid var(--border); display: flex; flex-direction: column; min-height: 0; }
+.lg-scroll { flex: 1; overflow-y: auto; padding: 14px; display: flex; flex-direction: column; gap: 16px; }
+.lg-foot { padding: 10px 14px; border-top: 1px solid var(--border); background: #faf9f7; }
+.lg-calc {
+  width: 100%; height: 42px; background: var(--primary); color: #fff; border: 0; border-radius: 2px; cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 1px; font-family: inherit;
+}
+.lg-calc:hover { background: var(--primary-dark); }
+.lg-calc span { font-size: 13.5px; font-weight: 700; letter-spacing: 1px; }
+.lg-calc small { font-size: 8px; opacity: .72; letter-spacing: 1px; }
+
+.lg-block { display: flex; flex-direction: column; gap: 10px; }
+.lg-block-head { display: flex; align-items: center; justify-content: space-between; padding-bottom: 7px; border-bottom: 1px solid #f0eeea; gap: 8px; }
+.lg-block-head > span { font-size: 11.5px; font-weight: 700; letter-spacing: .3px; display: flex; align-items: center; gap: 7px; }
+.lg-block-head i { font-style: normal; font: 700 8.5px/1 var(--font-num); color: #fff; background: var(--ink); padding: 4px 5px; border-radius: 1px; }
+.lg-block-head small { font-size: 9.5px; color: var(--text-sub); }
+
+.lg-vehicles { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.lg-vehicle { border: 1px solid var(--border); background: #fff; padding: 8px 4px; text-align: center; cursor: pointer; border-radius: 2px; transition: .15s; font-family: inherit; }
+.lg-vehicle b { display: block; font: 700 14px/1.2 var(--font-num); letter-spacing: -.2px; }
+.lg-vehicle span { display: block; font-size: 8px; color: var(--text-sub); letter-spacing: .4px; margin-top: 2px; }
+.lg-vehicle:hover { border-color: var(--border-hover); }
+.lg-vehicle.is-on { background: var(--primary); border-color: var(--primary); color: #fff; }
+.lg-vehicle.is-on span { color: rgba(255, 255, 255, .75); }
+.lg-vinfo { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); }
+.lg-vinfo div { background: #faf9f7; padding: 6px 8px; font-size: 9px; color: var(--text-sub); }
+.lg-vinfo b { display: block; font: 600 11.5px/1.6 var(--font-num); color: var(--text-main); letter-spacing: .2px; }
+
+/* ---------- 货物卡片 ---------- */
+.lg-cargo { border: 1px solid var(--border); background: #fff; margin-bottom: 10px; }
+.lg-cargo:last-child { margin-bottom: 0; }
+.lg-cargo-head { display: flex; align-items: center; gap: 8px; padding: 7px 8px; background: #f7f6f3; border-bottom: 1px solid #f0eeea; }
+.lg-no { width: 18px; height: 18px; flex-shrink: 0; background: var(--ink); color: #fff; font: 700 10px/18px var(--font-num); text-align: center; }
+.lg-name { border: 0; background: none; font-size: 12px; font-weight: 600; flex: 1; min-width: 0; outline: none; color: var(--text-main); font-family: inherit; padding: 2px 0; }
+.lg-name:focus { box-shadow: 0 1px 0 var(--primary); }
+.lg-del { border: 0; background: none; color: #b8b4ac; cursor: pointer; font-size: 12px; padding: 2px 4px; line-height: 1; }
+.lg-del:hover { color: var(--danger); }
+.lg-cargo-body { padding: 9px 8px; display: flex; flex-direction: column; gap: 8px; }
+
+.lg-grid { display: grid; gap: 7px; }
+.lg-grid-3 { grid-template-columns: repeat(3, 1fr); }
+.lg-grid-2 { grid-template-columns: repeat(2, 1fr); }
+.lg-field { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.lg-field > span { font-size: 8.5px; color: var(--text-sub); font-weight: 600; letter-spacing: .3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lg-iw { position: relative; display: block; }
+.lg-iw input {
+  width: 100%; height: 30px; border: 1px solid var(--border); border-radius: 2px; padding: 0 26px 0 8px;
+  font-size: 12px; font-family: var(--font-num); font-weight: 600; color: var(--text-main); background: #fff; outline: none;
+}
+.lg-iw input:focus { border-color: var(--primary); box-shadow: 0 0 0 2px rgba(176, 42, 30, .08); }
+.lg-iw em { position: absolute; right: 7px; top: 50%; transform: translateY(-50%); font-style: normal; font-size: 8.5px; color: #a8a29a; pointer-events: none; }
+.lg-hint { font-size: 9.5px; color: var(--text-sub); background: #f7f6f3; border-left: 2px solid var(--primary); padding: 4px 7px; line-height: 1.55; }
+.lg-hint b { font-family: var(--font-num); color: var(--text-main); font-weight: 600; }
+
+.lg-seg { display: flex; border: 1px solid var(--border); border-radius: 2px; overflow: hidden; }
+.lg-seg button { flex: 1; border: 0; border-right: 1px solid var(--border); background: #fff; padding: 6px 2px; font-size: 10px; color: var(--text-sub); cursor: pointer; white-space: nowrap; font-family: inherit; }
+.lg-seg button:last-child { border-right: 0; }
+.lg-seg button.is-on { background: var(--ink); color: #fff; }
+.lg-seg button:hover:not(.is-on) { background: #f7f6f3; }
+
+.lg-chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.lg-chips button { border: 1px solid var(--border); background: #fff; padding: 4px 8px; font-size: 10px; color: var(--text-sub); cursor: pointer; border-radius: 2px; font-family: inherit; }
+.lg-chips button small { font-size: 8px; opacity: .7; margin-left: 2px; }
+.lg-chips button.is-on { border-color: var(--primary); background: var(--primary-light); color: var(--primary); font-weight: 600; }
+.lg-chips button:hover:not(.is-on) { border-color: var(--border-hover); }
+
+.lg-switch-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; font-size: 10.5px; color: var(--text-sub); }
+.lg-switch { width: 32px; height: 18px; border-radius: 9px; border: 0; background: #d6d3cd; position: relative; cursor: pointer; transition: .15s; padding: 0; flex-shrink: 0; }
+.lg-switch::after { content: ''; position: absolute; left: 2px; top: 2px; width: 14px; height: 14px; border-radius: 50%; background: #fff; transition: .15s; }
+.lg-switch.is-on { background: var(--primary); }
+.lg-switch.is-on::after { left: 16px; }
+
+.lg-adv { border-top: 1px dashed #e6e3dd; padding-top: 7px; }
+.lg-adv summary { cursor: pointer; font-size: 10px; color: var(--text-sub); font-weight: 600; letter-spacing: .3px; list-style: none; display: flex; justify-content: space-between; }
+.lg-adv summary::-webkit-details-marker { display: none; }
+.lg-adv summary::after { content: '+'; font-family: var(--font-num); }
+.lg-adv[open] summary::after { content: '−'; }
+.lg-adv-body { display: flex; flex-direction: column; gap: 8px; padding-top: 8px; }
+
+.lg-add { width: 100%; border: 1px dashed var(--border-hover); background: #fff; padding: 8px; font-size: 11px; color: var(--text-sub); cursor: pointer; border-radius: 2px; font-family: inherit; }
+.lg-add b { color: var(--primary); font-size: 13px; margin-right: 4px; }
+.lg-add:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+
+/* ---------- 右侧结果 ---------- */
+.lg-right { flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 12px; gap: 9px; }
+.lg-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.lg-stat { background: #fff; border: 1px solid var(--border); padding: 8px 10px 7px; display: flex; align-items: baseline; gap: 3px; flex-wrap: wrap; position: relative; transition: .2s; }
+.lg-stat span { width: 100%; font-size: 9px; color: var(--text-sub); letter-spacing: .4px; margin-bottom: 1px; }
+.lg-stat b { font: 700 18px/1 var(--font-num); color: var(--ink); letter-spacing: -.3px; }
+.lg-stat i { font-style: normal; font-size: 9px; color: var(--text-sub); }
+.lg-stat.is-warn b { color: var(--warning); }
+.lg-stat.is-danger b { color: var(--danger); }
+.lg-stat.is-danger { border-color: rgba(176, 42, 30, .3); background: var(--danger-light); }
+
+.lg-est-strip { display: flex; align-items: center; gap: 14px; background: #fff; border: 1px solid var(--border); padding: 6px 10px; font-size: 10px; color: var(--text-sub); min-height: 30px; }
+.lg-est-strip b { font-family: var(--font-num); color: var(--primary); font-size: 12px; }
+.lg-tip { margin-left: auto; font-size: 10px; text-align: right; }
+.lg-tip.is-warn { color: var(--warning); }
+.lg-tip.is-danger { color: var(--danger); }
+
+.lg-stage { flex: 1; min-height: 220px; position: relative; background: #fff; border: 1px solid var(--border); overflow: hidden; }
+.lg-stage canvas { position: absolute; inset: 0; display: block; cursor: grab; }
+.lg-empty { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; color: var(--text-sub); pointer-events: none; }
+.lg-empty b { font-size: 13px; color: var(--text-main); font-weight: 600; }
+.lg-empty span { font-size: 10px; }
+.lg-tools { position: absolute; top: 8px; right: 8px; display: flex; flex-direction: column; gap: 4px; }
+.lg-tools button { width: 26px; height: 26px; border: 1px solid var(--border); background: rgba(255, 255, 255, .94); color: var(--text-sub); font-size: 13px; cursor: pointer; border-radius: 2px; line-height: 1; font-family: inherit; }
+.lg-tools button:hover { border-color: var(--primary); color: var(--primary); }
+.lg-tools button.is-on { background: var(--primary); border-color: var(--primary); color: #fff; }
+.lg-legend { position: absolute; left: 8px; bottom: 8px; display: flex; flex-wrap: wrap; gap: 10px; font-size: 9px; color: var(--text-sub); max-width: 74%; pointer-events: none; }
+.lg-legend i { display: inline-block; width: 8px; height: 8px; margin-right: 4px; vertical-align: -1px; }
+
+.lg-steps { height: 168px; flex-shrink: 0; background: #fff; border: 1px solid var(--border); display: flex; flex-direction: column; }
+.lg-steps-head { display: flex; align-items: center; justify-content: space-between; padding: 6px 10px; border-bottom: 1px solid #f0eeea; font-size: 10px; font-weight: 700; letter-spacing: .3px; }
+.lg-steps-head small { font-weight: 400; color: var(--text-sub); font-size: 9px; }
+.lg-steps-list { flex: 1; overflow-y: auto; padding: 2px 0; }
+.lg-step { display: flex; gap: 8px; align-items: flex-start; padding: 4px 10px; border-bottom: 1px solid #f7f6f3; font-size: 10px; }
+.lg-step:hover { background: #faf9f7; }
+.lg-step b { width: 22px; flex-shrink: 0; font: 700 9px/1.7 var(--font-num); color: var(--primary); text-align: right; }
+.lg-step span { color: var(--text-sub); line-height: 1.65; }
+.lg-step span strong { color: var(--text-main); font-weight: 600; }
+.lg-steps-empty { padding: 18px; text-align: center; font-size: 10px; color: var(--text-sub); }
+
+/* ---------- 装柜方案打印 ---------- */
+.lg-print-area { display: none; }
+.lgp-page { width: 210mm; min-height: 297mm; padding: 12mm; background: #fff; color: #14171a; font-family: "Helvetica Neue", Arial, "PingFang SC", "Microsoft YaHei", sans-serif; box-sizing: border-box; }
+.lgp-top { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 2px solid #14171a; padding-bottom: 4mm; }
+.lgp-top h1 { font-size: 17pt; margin: 0; letter-spacing: .5px; }
+.lgp-top h1 small { display: block; font-size: 7.5pt; letter-spacing: 2px; color: #666; font-weight: 400; margin-top: 1mm; }
+.lgp-meta { text-align: right; font-size: 8pt; line-height: 1.7; color: #333; }
+.lgp-meta b { display: inline-block; min-width: 22mm; margin-right: 1.5mm; color: #666; font-weight: 400; }
+.lgp-kpis { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2mm; margin-top: 4mm; }
+.lgp-kpi { border: .3mm solid #ccc; padding: 2mm; }
+.lgp-kpi span { display: block; font-size: 7pt; color: #666; }
+.lgp-kpi b { font-size: 13pt; font-variant-numeric: tabular-nums; }
+.lgp-kpi i { font-style: normal; font-size: 7pt; color: #666; margin-left: 1mm; }
+.lgp-h { font-size: 9pt; font-weight: 700; margin: 5mm 0 2mm; padding-left: 2mm; border-left: 1mm solid #b02a1e; letter-spacing: .3px; }
+.lgp-table { width: 100%; border-collapse: collapse; font-size: 7.8pt; }
+.lgp-table th { background: #14171a; color: #fff; font-weight: 600; padding: 1.8mm 1.5mm; text-align: left; font-size: 7.2pt; letter-spacing: .2px; }
+.lgp-table td { padding: 1.5mm; border-bottom: .25mm solid #ddd; }
+.lgp-table .r { text-align: right; font-variant-numeric: tabular-nums; }
+.lgp-table tfoot td { border-top: .5mm solid #14171a; border-bottom: 0; font-weight: 700; }
+.lgp-snap { margin-top: 3mm; border: .3mm solid #ddd; padding: 1.5mm; text-align: center; }
+.lgp-snap img { max-width: 100%; max-height: 72mm; }
+.lgp-note { margin-top: 4mm; font-size: 7.2pt; color: #666; line-height: 1.7; border-top: .3mm solid #ddd; padding-top: 2mm; }
+
+@media print {
+  body.lg-printing .app-layout { display: none !important; }
+  body.lg-printing .lg-print-area { display: block !important; }
+  body.lg-printing .print-area { display: none !important; }
+  body.lg-printing { display: block; height: auto; overflow: visible; background: #fff; }
+  body.lg-printing .lgp-page { page-break-after: always; }
+  body.lg-printing .lgp-page:last-child { page-break-after: auto; }
+  @page { size: A4; margin: 0; }
+}
+
+@media (max-width: 1280px) {
+  .lg-left { width: 388px; }
+  .lg-stat b { font-size: 16px; }
+}
+@media (max-width: 1080px) {
+  .ws-meta { display: none; }
+  .lg-body { flex-direction: column; overflow-y: auto; }
+  .lg-left { width: 100%; border-right: 0; border-bottom: 1px solid var(--border); }
+  .lg-scroll { overflow: visible; }
+  .lg-right { padding: 10px; }
+  .lg-stage { flex: none; height: 380px; }
+  .lg-steps { height: 190px; }
+}
+@media (max-width: 720px) {
+  .ws-brand { min-width: 0; }
+  .ws-brand-text { display: none; }
+  .ws-tab { padding: 0 10px; }
+  .ws-tab span { display: none; }
+  .lg-head { height: auto; padding: 8px 12px; flex-wrap: wrap; }
+  .lg-head-right { width: 100%; }
+  .lg-btn { flex: 1; }
+  .lg-stats { grid-template-columns: repeat(2, 1fr); }
+  .lg-grid-3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ---------- 打印：只保留 A4 单据，工具页脚不进入 PDF ---------- */
+@media print {
+  .print-area .a4-paper {
+    width: 210mm !important;
+    height: 297mm !important;
+    min-height: 297mm !important;
+    max-height: 297mm !important;
+    padding: 13mm !important;
+    overflow: hidden;
+    page-break-after: always;
+  }
+  .print-area .a4-paper:last-child { page-break-after: auto; }
+  .print-area .a4-paper.flow {
+    height: auto !important;
+    max-height: none !important;
+    overflow: visible;
+  }
+  .print-area .product-table th, .print-area .product-table td { font-size: 8pt; }
+  .print-area .product-table .num-cell { white-space: nowrap; }
+  /* 报关单栏目多，打印时压紧字号，避免「征免」竖排、栏目互相挤压 */
+  .print-area .cd-table th, .print-area .cd-table td { font-size: 6.6pt; padding: 1.4px 2px; line-height: 1.3; }
+  .print-area .cd-table th { word-break: keep-all; }
+  .print-area .cd-cell label { font-size: 6.2pt; }
+  .print-area .cd-cell span { font-size: 7.4pt; }
+}
