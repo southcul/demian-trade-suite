@@ -78,49 +78,7 @@ git clone https://github.com/southcul/demian-trade-suite.git ~/.dsh/skills/demia
 
 技能入口是根目录的 `SKILL.md`。
 
-### SkillHub
 
-仓库根目录不是发布包（含 `build/`、`README`、`docs/`）。先生成符合 SkillHub 白名单的 zip：
-
-```bash
-python build/package.py
-```
-
-产物：`dist/demian-trade-suite.zip`，只含 `SKILL.md`、`assets/`、`references/`、`scripts/`，并通过单文件 ≤1MB、整包 ≤10MB、≤100 文件、扩展名/前缀白名单检查。
-
-然后按 [SkillHub 发布教程](https://skillhub.cn/tutorials#publish-via-cli) 上传，或：
-
-```bash
-skillhub publish dist/demian-trade-suite.zip --changelog "首次发布"
-```
-
-## 数据口径（最容易错的地方）
-
-| 字段 | 口径 |
-|---|---|
-| `qty` | 件数 PCS，不是箱数 |
-| `pcs_per_ctn` | 每箱件数；装箱单必需 |
-| `gross_weight` / `net_weight` | **单件**毛重 / 净重 kg |
-| `ctn_l/w/h` | **外箱**尺寸 cm |
-| `unit_price_cny` | **含税采购价** CNY/件，不是卖价 |
-
-工作台按「含税采购价 → 退税额 → 费用分摊 → 目标利润率」反推外销单价；客户已给目标卖价时按 [`references/pricing.md`](references/pricing.md) 反推利润率。
-
-## 已知边界
-
-- 装柜一次只模拟**一个柜**；多柜数量按体积/重量粗算，需货代复核。
-- 不处理轴荷、道路限重、绑扎加固、危化品、冷藏柜/开顶柜/框架柜。
-- 报价是成本加成模型，没有手工锁定卖价。
-- HS Code、银行账号、公司抬头必须由使用者提供，示例数据仅用于演示。
-
-## 开发
-
-```bash
-python build/build.py      # 重新生成 assets/workbench.html
-python build/package.py    # 生成 SkillHub 发布 zip
-```
-
-`build/` 里是工作台的源码（`base.html` + `parts/`）；不要直接改 `assets/workbench.html`。
 
 ## English
 
