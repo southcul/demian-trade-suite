@@ -1005,6 +1005,17 @@
   .print-area .cd-cell label { font-size: 6.2pt; }
   .print-area .cd-cell span { font-size: 7.4pt; }
 }
+/* ---------- 卖方信息（所有单据共用） ---------- */
+.seller-save { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.seller-save .field-hint { margin: 0; white-space: nowrap; }
+.seller-block { margin-top: 14px; border-top: 1px dashed var(--border); padding-top: 10px; }
+.seller-block summary { cursor: pointer; list-style: none; display: flex; align-items: baseline; gap: 8px; font-size: 11.5px; font-weight: 700; color: var(--text-main); letter-spacing: .3px; }
+.seller-block summary::-webkit-details-marker { display: none; }
+.seller-block summary::before { content: '+'; font-family: var(--font-num); color: var(--primary); font-weight: 700; }
+.seller-block[open] summary::before { content: '−'; }
+.seller-block summary small { font-weight: 400; color: var(--text-sub); font-size: 10px; letter-spacing: 0; }
+.seller-block-body { margin-top: 10px; }
+#sellerCard .logo-upload-area { min-height: 96px; }
 
   </style>
 </head>
@@ -1167,6 +1178,135 @@
     
     <!-- 左侧：宽敞的表单与表格区 -->
     <div class="input-area">
+
+      <!-- 模块 00：卖方信息（所有单据共用，可保存） -->
+      <div class="card" id="sellerCard">
+        <div class="card-header">
+          <div class="card-title"><span class="card-num">00</span> <span data-i18n="cardSellerTitle">卖方信息（所有单据共用）</span></div>
+          <div class="seller-save">
+            <span class="field-hint" id="sellerSaveHint" data-i18n="sellerSaveHint">保存后新建订单自动带出</span>
+            <button class="btn btn-sm btn-outline" type="button" onclick="saveSellerProfile()"><span data-i18n="btnSaveSeller">保存卖方信息</span></button>
+          </div>
+        </div>
+        <div class="card-body">
+          <p class="field-hint" data-i18n="sellerHint">报价单、PI、发票、合同、装箱单、报关资料共用这一份卖方资料；保存后新建订单会自动带出。</p>
+          <div class="grid-2" style="margin-top:12px;">
+            <div class="form-group">
+              <label data-i18n="companyNameLabel">公司英文名称 (Beneficiary Name)</label>
+              <input type="text" id="companyName" value="SHENZHEN TECH CO., LTD." oninput="updatePreview()" />
+            </div>
+            <div class="form-group">
+              <label data-i18n="companyAddrLabel">公司地址 / 联系方式</label>
+              <input type="text" id="companyAddr" value="Room 101, Tech Park, Shenzhen, China | sales@tech.com" oninput="updatePreview()" />
+            </div>
+          </div>
+          <div class="grid-2" style="margin-top:12px;">
+            <div class="form-group">
+              <label data-i18n="taxNoLabel">出口商税号 (Tax/VAT No.)</label>
+              <input type="text" id="sellerTaxNo" value="" placeholder="91440300XXXXXXXX" oninput="updatePreview()" />
+            </div>
+            <p class="field-hint" data-i18n="sellerTaxHint" style="align-self:end;margin:0 0 9px;">税号会印在卖方抬头下方。</p>
+          </div>
+
+          <details class="seller-block">
+            <summary><span data-i18n="sellerBankTitle">银行信息</span><small data-i18n="sellerBankHint">仅 PI / CI / 合同打印</small></summary>
+            <div class="seller-block-body">
+              <div class="grid-2">
+                <div class="form-group">
+                  <label data-i18n="bankNameLabel">Bank Name</label>
+                  <input type="text" id="bankName" value="Bank of China, Shenzhen Branch" oninput="updatePreview()" />
+                </div>
+                <div class="form-group">
+                  <label data-i18n="bankAccNoLabel">Account No.</label>
+                  <input type="text" id="bankAccNo" value="1234 5678 9012 3456" oninput="updatePreview()" />
+                </div>
+              </div>
+              <div class="grid-2" style="margin-top:12px;">
+                <div class="form-group">
+                  <label data-i18n="bankSwiftLabel">SWIFT Code</label>
+                  <input type="text" id="bankSwift" value="BKCHCNBJ45A" oninput="updatePreview()" />
+                </div>
+                <div class="form-group">
+                  <label data-i18n="bankAddrLabel">Bank Address</label>
+                  <input type="text" id="bankAddr" value="No.101, Futian District, Shenzhen" oninput="updatePreview()" />
+                </div>
+              </div>
+              <div class="grid-2" style="margin-top:12px;">
+                <div class="form-group" style="grid-column: 1 / -1;">
+                  <label data-i18n="interBankLabel">中间行 / 代理行 (Intermediary Bank)</label>
+                  <input type="text" id="bankIntermediary" value="" placeholder="大额美元汇款常需填写，含 SWIFT" oninput="updatePreview()" />
+                </div>
+              </div>
+            </div>
+          </details>
+
+          <details class="seller-block">
+            <summary><span data-i18n="sellerAssetsTitle">Logo / 公章 / 手写签名</span><small data-i18n="sellerAssetsHint">可选，随卖方信息一起保存</small></summary>
+            <div class="seller-block-body">
+              <div class="grid-3">
+                <div>
+                  <div class="logo-upload-area">
+                    <input type="file" id="logoFileInput" accept="image/*" style="display:none;" onchange="handleLogoUpload(this)" />
+                    <img id="logoPreviewImg" class="logo-preview" style="display:none;" />
+                    <label class="img-upload-btn" onclick="document.getElementById('logoFileInput').click()">
+                      <span data-i18n="uploadLogo">上传公司 Logo</span>
+                    </label>
+                    <button id="logoRemoveBtn" class="img-remove-btn" style="display:none;" onclick="removeLogo()" title="Remove">✕</button>
+                    <input type="hidden" id="logoDataStore" />
+                  </div>
+                  <p class="field-hint" data-i18n="logoHint">建议 PNG / 透明底，会印在单据抬头左侧。</p>
+                </div>
+                <div>
+                  <div class="logo-upload-area">
+                    <input type="file" id="sealFileInput" accept="image/*" style="display:none;" onchange="handleSealUpload(this,'seal')" />
+                    <img id="sealPreviewImg" class="logo-preview" style="display:none;" />
+                    <label class="img-upload-btn" onclick="document.getElementById('sealFileInput').click()">
+                      <span data-i18n="uploadSeal">上传公章</span>
+                    </label>
+                    <button id="sealRemoveBtn" class="img-remove-btn" style="display:none;" onclick="removeSeal('seal')" title="Remove">✕</button>
+                    <input type="hidden" id="sealDataStore" />
+                  </div>
+                  <div class="seal-controls" id="sealControls" style="display:none;">
+                    <div class="seal-ctl-row">
+                      <label data-i18n="sealSize">尺寸</label>
+                      <input type="range" id="sealSize" min="20" max="70" value="38" oninput="updatePreview()" />
+                      <span class="seal-ctl-val" id="sealSizeVal">38mm</span>
+                    </div>
+                    <div class="seal-ctl-row">
+                      <label data-i18n="sealRotate">旋转</label>
+                      <input type="range" id="sealRotate" min="-25" max="25" value="-8" oninput="updatePreview()" />
+                      <span class="seal-ctl-val" id="sealRotateVal">-8°</span>
+                    </div>
+                    <div class="seal-ctl-row">
+                      <label data-i18n="sealOpacity">浓淡</label>
+                      <input type="range" id="sealOpacity" min="40" max="100" value="92" oninput="updatePreview()" />
+                      <span class="seal-ctl-val" id="sealOpacityVal">92%</span>
+                    </div>
+                    <label class="bi-toggle" style="margin-top:6px;">
+                      <input type="checkbox" id="sealWhiteRemove" checked onchange="reprocessSeal()" />
+                      <span data-i18n="sealWhiteRemove">自动去白底</span>
+                    </label>
+                  </div>
+                </div>
+                <div>
+                  <div class="logo-upload-area">
+                    <input type="file" id="signFileInput" accept="image/*" style="display:none;" onchange="handleSealUpload(this,'sign')" />
+                    <img id="signPreviewImg" class="logo-preview" style="display:none;" />
+                    <label class="img-upload-btn" onclick="document.getElementById('signFileInput').click()">
+                      <span data-i18n="uploadSign">上传手写签名</span>
+                    </label>
+                    <button id="signRemoveBtn" class="img-remove-btn" style="display:none;" onclick="removeSeal('sign')" title="Remove">✕</button>
+                    <input type="hidden" id="signDataStore" />
+                  </div>
+                  <p class="field-hint" data-i18n="sealHint">建议上传白底公章照片，系统自动去白底并叠加在签名栏。合同/PI 常需手写签名。</p>
+                </div>
+              </div>
+            </div>
+          </details>
+        </div>
+      </div>
+
+
       
       <!-- 模块A：产品与包装明细 (核心) -->
       <div class="card">
@@ -1305,7 +1445,7 @@
               <input type="text" id="destCountry" value="" placeholder="Germany" oninput="updatePreview()" />
             </div>
           </div>
-          <div class="grid-3" style="margin-top:16px;">
+          <div class="grid-2" style="margin-top:16px;">
             <div class="form-group">
               <label data-i18n="consigneeLabel">收货人 (Consignee)</label>
               <input type="text" id="consignee" value="" placeholder="留空则同客户公司" oninput="updatePreview()" />
@@ -1313,10 +1453,6 @@
             <div class="form-group">
               <label data-i18n="notifyLabel">通知人 (Notify Party)</label>
               <input type="text" id="notifyParty" value="" placeholder="SAME AS CONSIGNEE" oninput="updatePreview()" />
-            </div>
-            <div class="form-group">
-              <label data-i18n="taxNoLabel">出口商税号 (Tax/VAT No.)</label>
-              <input type="text" id="sellerTaxNo" value="" placeholder="91440300XXXXXXXX" oninput="updatePreview()" />
             </div>
           </div>
           <div class="grid-3" style="margin-top:16px;">
@@ -1366,10 +1502,7 @@
               <label data-i18n="palletLabel">托盘 / 柜型 (Pallets / Container)</label>
               <input type="text" id="palletInfo" value="" placeholder="10 pallets / 1x40HQ" oninput="updatePreview()" />
             </div>
-            <div class="form-group">
-              <label data-i18n="interBankLabel">中间行 / 代理行 (Intermediary Bank)</label>
-              <input type="text" id="bankIntermediary" value="" placeholder="大额美元汇款常需填写，含 SWIFT" oninput="updatePreview()" />
-            </div>
+            <p class="field-hint" style="align-self:end;margin:0 0 9px;" data-i18n="palletHint">托盘/柜型会印在装箱单与发票的 Pallets / Container 栏。</p>
           </div>
         </div>
       </div>
@@ -1529,116 +1662,6 @@
                 <label data-i18n="poaCommitmentLabel">承诺说明 (被委托方填写)</label>
                 <input type="text" id="poaCommitment" oninput="updatePreview()" />
               </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- 模块C：公司与银行信息 (PI专用) -->
-      <div class="card" id="companyBankCard">
-        <div class="card-header">
-          <div class="card-title"><span class="card-num">06</span> <span data-i18n="cardBankTitle">公司抬头与银行水单信息</span></div>
-        </div>
-        <div class="card-body">
-          <div class="grid-2">
-            <div class="form-group">
-              <label data-i18n="companyNameLabel">公司英文名称 (Beneficiary Name)</label>
-              <input type="text" id="companyName" value="SHENZHEN TECH CO., LTD." oninput="updatePreview()" />
-            </div>
-            <div class="form-group">
-              <label data-i18n="companyAddrLabel">公司地址 / 联系方式</label>
-              <input type="text" id="companyAddr" value="Room 101, Tech Park, Shenzhen, China | sales@tech.com" oninput="updatePreview()" />
-            </div>
-          </div>
-          <div class="grid-2" style="margin-top: 16px;" id="bankDetails">
-            <div class="form-group">
-              <label data-i18n="bankNameLabel">Bank Name</label>
-              <input type="text" id="bankName" value="Bank of China, Shenzhen Branch" oninput="updatePreview()" />
-            </div>
-            <div class="form-group">
-              <label data-i18n="bankAccNoLabel">Account No.</label>
-              <input type="text" id="bankAccNo" value="1234 5678 9012 3456" oninput="updatePreview()" />
-            </div>
-            <div class="form-group">
-              <label data-i18n="bankSwiftLabel">SWIFT Code</label>
-              <input type="text" id="bankSwift" value="BKCHCNBJ45A" oninput="updatePreview()" />
-            </div>
-            <div class="form-group">
-              <label data-i18n="bankAddrLabel">Bank Address</label>
-              <input type="text" id="bankAddr" value="No.101, Futian District, Shenzhen" oninput="updatePreview()" />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Logo 上传区域（始终可见） -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title"><span class="card-num">07</span> <span data-i18n="cardLogoTitle">公司 Logo</span></div>
-        </div>
-        <div class="card-body">
-          <div class="logo-upload-area">
-            <input type="file" id="logoFileInput" accept="image/*" style="display:none;" onchange="handleLogoUpload(this)" />
-            <img id="logoPreviewImg" class="logo-preview" style="display:none;" />
-            <label class="img-upload-btn" onclick="document.getElementById('logoFileInput').click()">
-               <span data-i18n="uploadLogo">上传公司 Logo</span>
-            </label>
-            <button id="logoRemoveBtn" class="img-remove-btn" style="display:none;" onclick="removeLogo()" title="Remove">✕</button>
-            <input type="hidden" id="logoDataStore" />
-          </div>
-        </div>
-      </div>
-
-      <!-- 模块D：公章与签名 -->
-      <div class="card">
-        <div class="card-header">
-          <div class="card-title"><span class="card-num">08</span> <span data-i18n="cardSealTitle">公章与手写签名 (导出即用)</span></div>
-        </div>
-        <div class="card-body">
-          <div class="grid-2">
-            <div>
-              <div class="logo-upload-area">
-                <input type="file" id="sealFileInput" accept="image/*" style="display:none;" onchange="handleSealUpload(this,'seal')" />
-                <img id="sealPreviewImg" class="logo-preview" style="display:none;" />
-                <label class="img-upload-btn" onclick="document.getElementById('sealFileInput').click()">
-                   <span data-i18n="uploadSeal">上传公章</span>
-                </label>
-                <button id="sealRemoveBtn" class="img-remove-btn" style="display:none;" onclick="removeSeal('seal')" title="Remove">✕</button>
-                <input type="hidden" id="sealDataStore" />
-              </div>
-              <div class="seal-controls" id="sealControls" style="display:none;">
-                <div class="seal-ctl-row">
-                  <label data-i18n="sealSize">尺寸</label>
-                  <input type="range" id="sealSize" min="20" max="70" value="38" oninput="updatePreview()" />
-                  <span class="seal-ctl-val" id="sealSizeVal">38mm</span>
-                </div>
-                <div class="seal-ctl-row">
-                  <label data-i18n="sealRotate">旋转</label>
-                  <input type="range" id="sealRotate" min="-25" max="25" value="-8" oninput="updatePreview()" />
-                  <span class="seal-ctl-val" id="sealRotateVal">-8°</span>
-                </div>
-                <div class="seal-ctl-row">
-                  <label data-i18n="sealOpacity">浓淡</label>
-                  <input type="range" id="sealOpacity" min="40" max="100" value="92" oninput="updatePreview()" />
-                  <span class="seal-ctl-val" id="sealOpacityVal">92%</span>
-                </div>
-                <label class="bi-toggle" style="margin-top:6px;">
-                  <input type="checkbox" id="sealWhiteRemove" checked onchange="reprocessSeal()" />
-                  <span data-i18n="sealWhiteRemove">自动去白底</span>
-                </label>
-              </div>
-            </div>
-            <div>
-              <div class="logo-upload-area">
-                <input type="file" id="signFileInput" accept="image/*" style="display:none;" onchange="handleSealUpload(this,'sign')" />
-                <img id="signPreviewImg" class="logo-preview" style="display:none;" />
-                <label class="img-upload-btn" onclick="document.getElementById('signFileInput').click()">
-                   <span data-i18n="uploadSign">上传手写签名</span>
-                </label>
-                <button id="signRemoveBtn" class="img-remove-btn" style="display:none;" onclick="removeSeal('sign')" title="Remove">✕</button>
-                <input type="hidden" id="signDataStore" />
-              </div>
-              <p class="field-hint" data-i18n="sealHint">建议上传白底公章照片，系统自动去白底并叠加在签名栏。合同/PI 常需手写签名。</p>
             </div>
           </div>
         </div>
@@ -2166,6 +2189,20 @@
       toastAutoSaved: '已自动保存',
       toastCleared: '草稿已清除',
       toastNoDraft: '暂无草稿可加载',
+      cardSellerTitle: '卖方信息（所有单据共用）',
+      sellerHint: '报价单、PI、发票、合同、装箱单、报关资料共用这一份卖方资料；保存后新建订单会自动带出。',
+      sellerSaveHint: '保存后新建订单自动带出',
+      btnSaveSeller: '保存卖方信息',
+      sellerSaved: '卖方信息已保存',
+      sellerSavedAt: '已保存',
+      sellerUnsaved: '未保存',
+      sellerBankTitle: '银行信息',
+      sellerBankHint: '仅 PI / CI / 合同打印',
+      sellerAssetsTitle: 'Logo / 公章 / 手写签名',
+      sellerAssetsHint: '可选，随卖方信息一起保存',
+      sellerTaxHint: '税号会印在卖方抬头下方。',
+      logoHint: '建议 PNG / 透明底，会印在单据抬头左侧。',
+      palletHint: '托盘/柜型会印在装箱单与发票的 Pallets / Container 栏。',
       cardLogoTitle: '公司 Logo',
       uploadImg: '上传图片',
       uploadLogo: '上传公司 Logo',
@@ -2311,6 +2348,20 @@
       toastAutoSaved: 'Auto saved',
       toastCleared: 'Draft cleared',
       toastNoDraft: 'No saved draft found',
+      cardSellerTitle: 'Seller Information (shared by all documents)',
+      sellerHint: 'One seller profile for quotation, PI, invoice, contract, packing list and customs documents. Saved values are restored for new orders.',
+      sellerSaveHint: 'Saved values are restored for new orders',
+      btnSaveSeller: 'Save seller info',
+      sellerSaved: 'Seller information saved',
+      sellerSavedAt: 'Saved',
+      sellerUnsaved: 'Unsaved',
+      sellerBankTitle: 'Bank details',
+      sellerBankHint: 'Printed on PI / CI / contract only',
+      sellerAssetsTitle: 'Logo / seal / signature',
+      sellerAssetsHint: 'Optional, saved with the seller profile',
+      sellerTaxHint: 'The tax number is printed under the seller header.',
+      logoHint: 'PNG with transparent background recommended; printed at the top-left.',
+      palletHint: 'Pallets / container is printed on packing list and invoice.',
       cardLogoTitle: 'Company Logo',
       uploadImg: 'Upload Image',
       uploadLogo: 'Upload Company Logo',
@@ -3036,10 +3087,6 @@
   // 单据类型切换
   document.getElementById('docType').addEventListener('change', function() {
     const def = DOC_DEFS[this.value] || DOC_DEFS['QUOTATION'];
-
-    // 需要银行信息的单据才显示公司抬头与银行卡片
-    const companyBankCard = document.getElementById('companyBankCard');
-    if (companyBankCard) companyBankCard.style.display = def.bank ? 'block' : 'none';
 
     // 装运信息卡：发票 / 合同 / 装箱单才需要
     const shippingCard = document.getElementById('shippingCard');
@@ -4891,6 +4938,121 @@
     }
   }
 
+
+  /* ==========================================================================
+     卖方信息：所有单据共用，独立保存在 localStorage，新建订单自动带出
+     ========================================================================== */
+  const SELLER_PROFILE_KEY = 'ft_seller_profile_v1';
+  const SELLER_TEXT_FIELDS = ['companyName', 'companyAddr', 'sellerTaxNo', 'bankName', 'bankAccNo', 'bankSwift', 'bankAddr', 'bankIntermediary'];
+  const SELLER_MEDIA_FIELDS = ['logoDataStore', 'sealDataStore', 'signDataStore'];
+  const SELLER_RANGE_FIELDS = ['sealSize', 'sealRotate', 'sealOpacity'];
+
+  function sellerHint(text) {
+    const el = document.getElementById('sellerSaveHint');
+    if (el && text) el.textContent = text;
+  }
+
+  function collectSellerProfile() {
+    const data = { _v: 1, updatedAt: Date.now() };
+    SELLER_TEXT_FIELDS.forEach(id => {
+      const el = document.getElementById(id);
+      data[id] = el ? el.value : '';
+    });
+    const mediaKey = { logoDataStore: 'logoData', sealDataStore: 'sealData', signDataStore: 'signData' };
+    SELLER_MEDIA_FIELDS.forEach(id => {
+      const el = document.getElementById(id);
+      data[mediaKey[id]] = el ? el.value : '';
+    });
+    SELLER_RANGE_FIELDS.forEach(id => {
+      const el = document.getElementById(id);
+      data[id] = el ? el.value : '';
+    });
+    const wr = document.getElementById('sealWhiteRemove');
+    data.sealWhiteRemove = wr ? !!wr.checked : true;
+    return data;
+  }
+
+  function loadSellerProfile() {
+    try {
+      const raw = localStorage.getItem(SELLER_PROFILE_KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function saveSellerProfile(silent = false) {
+    try {
+      const json = JSON.stringify(collectSellerProfile());
+      if (json.length > 4 * 1024 * 1024) {
+        if (!silent) showToast(i18n[currentLang].toastStorageFull, 'warn');
+        return;
+      }
+      localStorage.setItem(SELLER_PROFILE_KEY, json);
+      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+      sellerHint((i18n[currentLang].sellerSavedAt || '已保存') + ' ' + time);
+      if (typeof autoSaveDraft === 'function') autoSaveDraft();
+      if (!silent) showToast(i18n[currentLang].sellerSaved || '卖方信息已保存', 'ok');
+    } catch (e) {
+      if (!silent) {
+        showToast(e.name === 'QuotaExceededError'
+          ? i18n[currentLang].toastStorageFull
+          : (i18n[currentLang].toastSaveFailed || '保存失败'), 'warn');
+      }
+    }
+  }
+
+  function applySellerProfile(data, silent = true) {
+    if (!data) return false;
+    SELLER_TEXT_FIELDS.forEach(id => {
+      if (Object.prototype.hasOwnProperty.call(data, id)) setVal(id, data[id] == null ? '' : data[id]);
+    });
+    if (Object.prototype.hasOwnProperty.call(data, 'logoData')) {
+      const store = document.getElementById('logoDataStore');
+      if (data.logoData) {
+        if (store) store.value = data.logoData;
+        const img = document.getElementById('logoPreviewImg'), btn = document.getElementById('logoRemoveBtn');
+        if (img) { img.src = data.logoData; img.style.display = 'block'; }
+        if (btn) btn.style.display = 'flex';
+      } else {
+        removeLogo();
+      }
+    }
+    if (Object.prototype.hasOwnProperty.call(data, 'sealData')) {
+      if (data.sealData) { _rawSealData = data.sealData; setSealImage('seal', data.sealData); }
+      else setSealImage('seal', '');
+    }
+    if (Object.prototype.hasOwnProperty.call(data, 'signData')) {
+      setSealImage('sign', data.signData || '');
+    }
+    SELLER_RANGE_FIELDS.forEach(id => {
+      if (data[id] !== undefined) {
+        const el = document.getElementById(id);
+        if (el) { el.value = data[id]; el.dispatchEvent(new Event('input')); }
+      }
+    });
+    const wr = document.getElementById('sealWhiteRemove');
+    if (wr && data.sealWhiteRemove !== undefined) wr.checked = !!data.sealWhiteRemove;
+    if (!silent) sellerHint(i18n[currentLang].sellerSavedAt || '已保存');
+    updatePreview();
+    return true;
+  }
+
+  let _sellerSaveTimer = null;
+  function scheduleSellerProfileSave() {
+    clearTimeout(_sellerSaveTimer);
+    sellerHint(i18n[currentLang].sellerUnsaved || '未保存');
+    _sellerSaveTimer = setTimeout(() => saveSellerProfile(true), 900);
+  }
+
+  function bindSellerProfileAutoSave() {
+    const card = document.getElementById('sellerCard');
+    if (!card || card.dataset.sellerBound) return;
+    card.dataset.sellerBound = '1';
+    card.addEventListener('input', scheduleSellerProfileSave);
+    card.addEventListener('change', scheduleSellerProfileSave);
+  }
+
   function clearDraft() {
     try { localStorage.removeItem('demian_quote_draft'); } catch (e) {}
     bumpOrderSeq(document.getElementById('quoteDate').value);
@@ -4902,6 +5064,8 @@
     currentTerm = 'FOB';
     document.querySelectorAll('.pill').forEach(b => b.classList.toggle('active', b.dataset.term === 'FOB'));
     loadSampleProducts();
+    const sellerProfile = loadSellerProfile();
+    if (sellerProfile) applySellerProfile(sellerProfile, true);
     document.getElementById('docType').dispatchEvent(new Event('change'));
     calculate();
     showToast(i18n[currentLang].toastCleared, 'ok');
@@ -5085,8 +5249,15 @@
     const dateEl = document.getElementById('quoteDate');
     if (dateEl && !dateEl.value) dateEl.value = new Date().toISOString().split('T')[0];
 
-    // 加载草稿，否则加载示例数据
-    if (!loadDraft()) loadSampleProducts();
+    // 加载草稿，否则加载示例数据；卖方信息作为默认值补齐
+    const hadDraft = loadDraft();
+    if (!hadDraft) loadSampleProducts();
+    const sellerProfile = loadSellerProfile();
+    const companyEl = document.getElementById('companyName');
+    if (sellerProfile && (!hadDraft || !companyEl || !companyEl.value.trim())) {
+      applySellerProfile(sellerProfile, true);
+    }
+    bindSellerProfileAutoSave();
 
     const docTypeEl = document.getElementById('docType');
     if (docTypeEl) docTypeEl.dispatchEvent(new Event('change'));
