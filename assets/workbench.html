@@ -1017,6 +1017,791 @@
 .seller-block-body { margin-top: 10px; }
 #sellerCard .logo-upload-area { min-height: 96px; }
 
+/* ==========================================================================
+   Executive business theme — 藏青 / 香槟金 / 象牙白
+   这一层放在所有样式之后，只覆盖视觉，不改布局逻辑。
+   ========================================================================== */
+:root {
+  --ink: #0f1b2d;
+  --ink-2: #1b2a44;
+  --primary: #14213d;
+  --primary-dark: #0b1526;
+  --primary-light: #f5f0e6;
+  --primary-50: #ece2d1;
+  --gold: #b08d57;
+  --gold-2: #d6bd94;
+  --gold-soft: #f4ecdd;
+  --success: #2e6b4f;
+  --success-light: #edf4ef;
+  --danger: #a33a2a;
+  --danger-light: #fbf0ed;
+  --warning: #9a7228;
+  --warning-light: #fbf5e6;
+  --bg: #f3efe7;
+  --card: #fffdf9;
+  --text-main: #17202e;
+  --text-sub: #746d61;
+  --border: #e0d6c5;
+  --border-hover: #c9b995;
+  --radius: 0px;
+  --radius-lg: 0px;
+  --shadow-sm: 0 1px 0 rgba(16, 29, 51, .04);
+  --shadow: 0 1px 2px rgba(16, 29, 51, .05);
+  --shadow-lg: 0 18px 48px rgba(16, 29, 51, .10);
+}
+
+html,
+body {
+  background: var(--bg);
+}
+
+body {
+  font-family: "Segoe UI", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", Arial, sans-serif;
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+  background:
+    radial-gradient(1200px 600px at 12% -10%, #fbf8f1 0%, rgba(251, 248, 241, 0) 60%),
+    linear-gradient(180deg, #f6f2ea 0%, #f1ece2 100%);
+}
+
+::selection {
+  background: rgba(176, 141, 87, .25);
+  color: var(--ink);
+}
+
+/* ---------- 顶栏 ---------- */
+.ws-nav {
+  height: 66px;
+  padding: 0 26px;
+  gap: 30px;
+  background: linear-gradient(180deg, #101d33 0%, #0c1728 100%);
+  border-bottom: 1px solid rgba(176, 141, 87, .55);
+}
+.ws-brand {
+  gap: 12px;
+  min-width: 240px;
+}
+.ws-mark {
+  width: 30px;
+  height: 30px;
+  border: 1px solid var(--gold);
+  background: transparent;
+  color: var(--gold-2);
+  font: 600 11px/1 var(--font-num);
+  letter-spacing: 1px;
+}
+.ws-brand-text b {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 3px;
+}
+.ws-brand-text small {
+  font-size: 7.5px;
+  letter-spacing: 2.4px;
+  color: rgba(214, 189, 148, .78);
+  margin-top: 3px;
+}
+.ws-tab {
+  padding: 0 22px;
+  font-size: 13px;
+  letter-spacing: .08em;
+  color: #9aa5b5;
+}
+.ws-tab span {
+  color: rgba(214, 189, 148, .55);
+  letter-spacing: 1.5px;
+}
+.ws-tab:hover {
+  color: #fff;
+}
+.ws-tab.is-on {
+  background: transparent;
+  color: #fff;
+}
+.ws-tab.is-on::after {
+  left: 22px;
+  right: 22px;
+  height: 2px;
+  background: var(--gold);
+}
+.ws-tab.is-on span {
+  color: var(--gold-2);
+}
+.ws-meta {
+  color: rgba(255, 255, 255, .55);
+  font-size: 10.5px;
+  letter-spacing: .06em;
+}
+.ws-live {
+  background: var(--gold);
+  box-shadow: 0 0 0 3px rgba(176, 141, 87, .18);
+}
+
+/* ---------- 装柜工作区 ---------- */
+.lg-workspace {
+  background: transparent;
+}
+.lg-head {
+  height: 66px;
+  padding: 0 24px;
+  background: rgba(255, 253, 249, .94);
+  border-bottom: 1px solid var(--border);
+}
+.lg-title {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: .06em;
+}
+.lg-title small {
+  font-size: 8px;
+  letter-spacing: 2.4px;
+  color: var(--gold);
+}
+.lg-tabs {
+  border: 1px solid var(--border);
+  background: transparent;
+  padding: 0;
+}
+.lg-tab {
+  padding: 9px 18px;
+  font-size: 12px;
+  letter-spacing: .04em;
+}
+.lg-tab.is-on {
+  background: var(--ink);
+  color: #fff;
+  box-shadow: inset 0 -2px 0 var(--gold);
+}
+.lg-btn {
+  height: 36px;
+  padding: 0 16px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-sub);
+  font-size: 12px;
+  letter-spacing: .04em;
+}
+.lg-btn:hover {
+  border-color: var(--gold);
+  color: var(--ink);
+  background: var(--gold-soft);
+}
+.lg-btn-primary {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+}
+.lg-btn-primary:hover {
+  background: var(--primary-dark);
+  border-color: var(--gold);
+  color: #fff;
+}
+
+.lg-left {
+  width: 448px;
+  background: var(--card);
+  border-right: 1px solid var(--border);
+}
+.lg-scroll {
+  padding: 22px;
+  gap: 22px;
+}
+.lg-block-head {
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.lg-block-head > span {
+  font-size: 12.5px;
+  letter-spacing: .05em;
+}
+.lg-block-head i {
+  background: var(--ink);
+  color: var(--gold-2);
+  padding: 5px 6px;
+  font-size: 8.5px;
+}
+.lg-block-head small {
+  font-size: 9.5px;
+  letter-spacing: .03em;
+}
+.lg-vehicle {
+  padding: 12px 4px;
+  border-color: var(--border);
+  background: #fff;
+}
+.lg-vehicle b {
+  font-size: 15px;
+}
+.lg-vehicle.is-on {
+  background: var(--ink);
+  border-color: var(--ink);
+  box-shadow: inset 0 -2px 0 var(--gold);
+}
+.lg-vinfo {
+  border-color: var(--border);
+}
+.lg-vinfo div {
+  background: #faf6ee;
+  padding: 9px 10px;
+}
+.lg-vinfo b {
+  font-size: 12px;
+}
+
+.lg-cargo {
+  border-color: var(--border);
+  background: #fff;
+}
+.lg-cargo-head {
+  padding: 9px 10px;
+  background: #f8f4ec;
+  border-bottom-color: var(--border);
+}
+.lg-no {
+  background: var(--ink);
+  color: var(--gold-2);
+  width: 20px;
+  height: 20px;
+  line-height: 20px;
+}
+.lg-name {
+  font-size: 12.5px;
+}
+.lg-cargo-body {
+  padding: 11px 10px;
+  gap: 10px;
+}
+.lg-field > span {
+  font-size: 9px;
+  letter-spacing: .04em;
+  color: #857b6c;
+}
+.lg-iw input {
+  height: 36px;
+  border-color: #ddd2bf;
+  background: #fff;
+  font-size: 13px;
+}
+.lg-iw input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(176, 141, 87, .14);
+}
+.lg-iw em {
+  color: #9b9284;
+}
+.lg-hint {
+  background: var(--gold-soft);
+  border-left: 2px solid var(--gold);
+  padding: 6px 9px;
+}
+.lg-seg {
+  border-color: var(--border);
+}
+.lg-seg button {
+  padding: 7px 2px;
+  font-size: 10px;
+}
+.lg-seg button.is-on {
+  background: var(--ink);
+  color: #fff;
+}
+.lg-chips button {
+  padding: 5px 9px;
+  border-color: var(--border);
+}
+.lg-chips button.is-on {
+  border-color: var(--gold);
+  background: var(--gold-soft);
+  color: var(--ink);
+}
+.lg-switch.is-on {
+  background: var(--gold);
+}
+.lg-adv {
+  border-top-color: var(--border);
+}
+.lg-add {
+  border-color: var(--border-hover);
+  background: transparent;
+  padding: 10px;
+}
+.lg-add:hover {
+  border-color: var(--gold);
+  color: var(--ink);
+  background: var(--gold-soft);
+}
+.lg-add b {
+  color: var(--gold);
+}
+
+.lg-foot {
+  padding: 12px 18px;
+  background: #faf6ee;
+  border-top: 1px solid var(--border);
+}
+.lg-calc {
+  height: 52px;
+  background: var(--ink);
+  box-shadow: inset 0 2px 0 var(--gold);
+}
+.lg-calc:hover {
+  background: var(--primary-dark);
+}
+.lg-calc span {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 3px;
+}
+.lg-calc small {
+  font-size: 8px;
+  letter-spacing: 1.4px;
+  color: rgba(255, 255, 255, .55);
+}
+
+.lg-right {
+  padding: 16px 18px;
+  gap: 12px;
+}
+.lg-stats {
+  gap: 12px;
+}
+.lg-stat {
+  padding: 14px 16px 12px;
+  border: 1px solid var(--border);
+  border-top: 2px solid var(--gold);
+  background: var(--card);
+}
+.lg-stat span {
+  font-size: 9.5px;
+  letter-spacing: .08em;
+  color: var(--text-sub);
+}
+.lg-stat b {
+  font-size: 26px;
+  font-weight: 650;
+  color: var(--ink);
+  letter-spacing: -.02em;
+}
+.lg-stat i {
+  font-size: 9.5px;
+}
+.lg-stat.is-warn {
+  border-top-color: var(--warning);
+}
+.lg-stat.is-danger {
+  border-color: #d9a89f;
+  border-top-color: var(--danger);
+  background: var(--danger-light);
+}
+.lg-est-strip {
+  padding: 9px 14px;
+  background: var(--gold-soft);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  font-size: 10.5px;
+}
+.lg-est-strip b {
+  font-size: 13px;
+  color: var(--ink);
+}
+.lg-stage {
+  border: 1px solid var(--border);
+  background: linear-gradient(180deg, #fffdf9 0%, #fbf7ef 100%);
+}
+.lg-tools button {
+  width: 30px;
+  height: 30px;
+  border-color: var(--border);
+  background: rgba(255, 253, 249, .96);
+}
+.lg-tools button:hover {
+  border-color: var(--gold);
+  color: var(--gold);
+}
+.lg-tools button.is-on {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--gold-2);
+}
+.lg-legend {
+  font-size: 9px;
+}
+.lg-steps {
+  height: 196px;
+  border: 1px solid var(--border);
+  background: var(--card);
+}
+.lg-steps-head {
+  padding: 9px 14px;
+  background: #faf6ee;
+  border-bottom: 1px solid var(--border);
+  font-size: 10.5px;
+  letter-spacing: .08em;
+}
+.lg-step {
+  padding: 7px 14px;
+  border-bottom: 1px solid #f2ebdf;
+  font-size: 10.5px;
+}
+.lg-step b {
+  color: var(--gold);
+  font-size: 10px;
+}
+
+/* ---------- 单证工作区 ---------- */
+.doc-flow {
+  padding: 0 8px;
+  background: #0f1b2d;
+  border-bottom: 1px solid var(--gold);
+}
+.flow-chip {
+  padding: 11px 18px;
+  font-size: 12.5px;
+  letter-spacing: .04em;
+}
+.flow-chip.active {
+  background: transparent;
+  color: var(--gold-2);
+  box-shadow: inset 0 -2px 0 var(--gold);
+}
+.flow-chip.active.has-data::after {
+  background: rgba(176, 141, 87, .8);
+}
+.top-bar {
+  background: rgba(255, 253, 249, .96);
+  border-bottom: 1px solid var(--border);
+}
+.top-bar > .top-bar-row {
+  padding: 0 24px;
+}
+.top-bar > .top-bar-row:first-of-type {
+  padding-top: 12px;
+}
+.top-bar > .top-bar-row:last-child {
+  padding-bottom: 12px;
+}
+.top-bar-row + .top-bar-row {
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px solid #efe7d9;
+}
+.top-bar label {
+  font-size: 9.5px;
+  letter-spacing: .08em;
+  color: #857b6c;
+  font-weight: 600;
+}
+.top-bar input,
+.top-bar select {
+  height: 36px;
+  padding: 0 11px;
+  border-color: #ddd2bf;
+  background: #fff;
+  font-size: 13px;
+}
+.top-bar input:focus,
+.top-bar select:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(176, 141, 87, .14);
+}
+.top-bar-actions .btn {
+  height: 36px;
+  padding: 0 15px;
+  font-size: 12px;
+}
+.top-bar-actions .btn-primary {
+  padding: 0 20px;
+  font-size: 12.5px;
+}
+.pill {
+  height: 34px;
+  padding: 0 14px;
+  border-color: var(--border);
+  background: transparent;
+  font-size: 12px;
+  letter-spacing: .03em;
+}
+.pill:hover {
+  border-color: var(--gold);
+  color: var(--ink);
+  background: var(--gold-soft);
+}
+.pill.active {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: #fff;
+  box-shadow: inset 0 -2px 0 var(--gold);
+}
+
+.main-workspace {
+  background: transparent;
+}
+.input-area {
+  padding: 24px;
+  gap: 20px;
+}
+.card {
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: 0 1px 2px rgba(16, 29, 51, .035);
+}
+.card:hover {
+  border-color: var(--border-hover);
+  box-shadow: 0 8px 24px rgba(16, 29, 51, .05);
+}
+.card-header {
+  padding: 15px 22px;
+  background: linear-gradient(180deg, #fffdf9 0%, #faf5ec 100%);
+  border-bottom: 1px solid var(--border);
+}
+.card-header::before {
+  height: 2px;
+  background: var(--gold);
+}
+.card-title {
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: .03em;
+}
+.card-num {
+  width: 28px;
+  height: 28px;
+  background: var(--ink);
+  color: var(--gold-2);
+  border: 1px solid rgba(176, 141, 87, .45);
+  font-size: 10px;
+}
+.card-body {
+  padding: 22px;
+}
+.card-badge {
+  background: var(--gold-soft);
+  color: #857b6c;
+  border: 1px solid #eadfc9;
+  padding: 4px 10px;
+}
+.form-group {
+  gap: 8px;
+}
+.form-group label {
+  font-size: 10px;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+  color: #857b6c;
+  font-weight: 600;
+}
+.form-group input,
+.form-group select {
+  height: 38px;
+  padding: 0 12px;
+  border-color: #ddd2bf;
+  background: #fff;
+  font-size: 13.5px;
+}
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(176, 141, 87, .14);
+}
+.form-group textarea {
+  border-color: #ddd2bf;
+  padding: 10px 12px;
+}
+.input-group .addon {
+  background: #f8f2e7;
+  border-color: #ddd2bf;
+  border-radius: 0;
+  color: #857b6c;
+}
+.btn {
+  padding: 9px 18px;
+  font-size: 12.5px;
+  letter-spacing: .04em;
+}
+.btn-primary {
+  background: var(--ink);
+  border-color: var(--ink);
+}
+.btn-primary:hover {
+  background: var(--primary-dark);
+  border-color: var(--gold);
+}
+.btn-outline {
+  background: transparent;
+  border-color: #d7cbb8;
+  color: var(--ink);
+}
+.btn-outline:hover {
+  background: var(--gold-soft);
+  border-color: var(--gold);
+  color: var(--ink);
+}
+.btn-sm {
+  padding: 7px 12px;
+  font-size: 11.5px;
+}
+
+.sku-card {
+  border-color: var(--border);
+  background: #fff;
+}
+.sku-card-header {
+  padding: 15px 18px;
+  background: #f8f3ea;
+  border-bottom: 1px solid var(--border);
+}
+.sku-card-num {
+  width: 28px;
+  height: 28px;
+  background: var(--ink);
+  color: var(--gold-2);
+}
+.sku-card-body {
+  padding: 18px;
+}
+.sku-card-grid .form-group input,
+.sku-card-grid .form-group select {
+  height: 34px;
+  padding: 0 9px;
+  font-size: 13px;
+  border-color: #ddd2bf;
+}
+.sku-card-grid .form-group input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(176, 141, 87, .12);
+}
+.sku-card-dims input {
+  border-color: #ddd2bf;
+  height: 32px;
+}
+.sku-card-results {
+  background: #faf6ee;
+}
+.sku-card-result.is-quote {
+  background: var(--gold-soft);
+  border-color: #eadfc9;
+}
+
+.right-sidebar {
+  width: 300px;
+  background: var(--card);
+  border-left: 1px solid var(--border);
+}
+.hero-stat {
+  padding: 20px 18px 18px;
+  background: linear-gradient(160deg, #14213d 0%, #0c1728 100%);
+  border-bottom: 1px solid var(--gold);
+}
+.hero-label {
+  font-size: 9.5px;
+  letter-spacing: 1.4px;
+  color: var(--gold-2);
+}
+.hero-value {
+  font-size: 34px;
+  font-weight: 600;
+  letter-spacing: -.01em;
+  color: #fff;
+}
+.margin-card {
+  padding: 14px 18px;
+  background: #f8f4ec;
+  border-bottom: 1px solid var(--border);
+}
+.margin-label {
+  color: #857b6c;
+  letter-spacing: 1px;
+}
+.margin-pct {
+  color: var(--success);
+  font-size: 22px;
+}
+.stats-title {
+  padding: 13px 18px 8px;
+  background: #faf6ee;
+  font-size: 9.5px;
+  letter-spacing: 1.4px;
+  color: #857b6c;
+}
+.stat-row {
+  padding: 9px 18px;
+  border-bottom-color: #f0e9dc;
+}
+.stat-label {
+  font-size: 11.5px;
+}
+.stat-value {
+  font-size: 13.5px;
+}
+.shortcut-hint {
+  background: #faf6ee !important;
+}
+
+.preview-drawer {
+  width: 700px;
+  background: #f1ece2;
+}
+.drawer-header {
+  background: #fffdf9;
+  border-bottom: 1px solid var(--border);
+}
+.a4-paper {
+  border: 1px solid #e6ddce;
+  box-shadow: 0 16px 40px rgba(16, 29, 51, .10);
+}
+
+/* 卖方信息卡 */
+#sellerCard {
+  border-top: 2px solid var(--gold);
+}
+.seller-save .field-hint {
+  color: #857b6c;
+  font-size: 10px;
+}
+.seller-block {
+  border-top-color: var(--border);
+}
+.seller-block summary {
+  font-size: 12px;
+  letter-spacing: .04em;
+}
+.seller-block summary::before {
+  color: var(--gold);
+}
+.seller-block summary small {
+  color: #9b9284;
+}
+
+@media (max-width: 1280px) {
+  .lg-left {
+    width: 400px;
+  }
+  .lg-stat b {
+    font-size: 22px;
+  }
+}
+@media (max-width: 1080px) {
+  .lg-left {
+    width: 100%;
+  }
+  .ws-brand {
+    min-width: 0;
+  }
+}
+
+/* 预览抽屉宽度改为 700 后，关闭态必须同步右移，否则会在右侧露出 40px */
+.preview-drawer { right: -700px; }
+.preview-drawer.open { right: 0; }
+
+@media (max-width: 1500px) {
+  .top-bar > .top-bar-row:first-of-type { padding-top: 9px; }
+  .top-bar > .top-bar-row:last-child { padding-bottom: 9px; }
+  .top-bar-row + .top-bar-row { margin-top: 8px; padding-top: 8px; }
+  .top-bar input, .top-bar select { height: 34px; }
+  .top-bar-actions .btn { height: 34px; }
+}
+
   </style>
 </head>
 <body>
@@ -1025,8 +1810,8 @@
   <!-- ================= 工作台导航：装柜 / 单证 ================= -->
   <nav class="ws-nav" id="wsNav">
     <div class="ws-brand">
-      <span class="ws-mark">外</span>
-      <div class="ws-brand-text"><b>外贸工作台</b><small>LOADING · DOCUMENTS · PI</small></div>
+      <span class="ws-mark">FT</span>
+      <div class="ws-brand-text"><b>外贸工作台</b><small>FOREIGN TRADE DESK</small></div>
     </div>
     <div class="ws-tabs" role="tablist">
       <button class="ws-tab is-on" data-ws="loading" role="tab" aria-selected="true">装柜计算<span>LOADING</span></button>
@@ -1055,7 +1840,6 @@
             <option value="CUSTOMS POA" data-i18n="docTypePOA">代理报关委托书 + 委托报关协议</option>
           </optgroup>
         </select>
-        <small id="docTypeHint" style="color: var(--text-sub); font-size: 11px; margin-top: 2px; display: block;" data-i18n="docTypeHintQuotation">报价单不含银行信息</small>
       </div>
       <div class="group">
         <label data-i18n="customerCompany">客户公司 (Company)</label>
@@ -2032,7 +2816,7 @@
 
   /* ========== 9 种单据配色 ========== */
   const DOC_THEMES = {
-    classic:  { name: '商务蓝', accent: '#1e40af', dark: '#1e3a8a', soft: '#eff6ff' },
+    classic:  { name: '商务藏青', accent: '#14213d', dark: '#0b1526', soft: '#f5f0e6' },
     graphite: { name: '石墨灰', accent: '#334155', dark: '#1e293b', soft: '#f1f5f9' },
     emerald:  { name: '松石绿', accent: '#047857', dark: '#065f46', soft: '#ecfdf5' },
     burgundy: { name: '酒红',   accent: '#9f1239', dark: '#881337', soft: '#fff1f2' },
@@ -5283,7 +6067,7 @@
       { key: '7.6m', name: '7.6m', en: 'TRUCK', w: 230, h: 230, d: 760, maxWeight: 12000, vol: 40.2 }
     ]
   };
-  var COLORS = ['#b02a1e', '#2b3138', '#1a7a4c', '#96631a', '#5f6b7a', '#7c4a2d', '#3d5a80', '#6b7280'];
+  var COLORS = ['#1d3557', '#b08d57', '#2f5d50', '#7a2e2e', '#4a5568', '#8c6b4f', '#3d5a80', '#6b7280'];
   var PACK = { none: 0, foam: 1, epo: 3, divider: 2 };
   var PACK_LABEL = { none: '无', foam: '气泡膜', epo: '珍珠棉', divider: '隔板' };
   var COS = Math.cos(Math.PI / 9), SIN = Math.sin(Math.PI / 9);

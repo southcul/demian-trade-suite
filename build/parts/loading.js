@@ -16,7 +16,7 @@
       { key: '7.6m', name: '7.6m', en: 'TRUCK', w: 230, h: 230, d: 760, maxWeight: 12000, vol: 40.2 }
     ]
   };
-  var COLORS = ['#b02a1e', '#2b3138', '#1a7a4c', '#96631a', '#5f6b7a', '#7c4a2d', '#3d5a80', '#6b7280'];
+  var COLORS = ['#1d3557', '#b08d57', '#2f5d50', '#7a2e2e', '#4a5568', '#8c6b4f', '#3d5a80', '#6b7280'];
   var PACK = { none: 0, foam: 1, epo: 3, divider: 2 };
   var PACK_LABEL = { none: '无', foam: '气泡膜', epo: '珍珠棉', divider: '隔板' };
   var COS = Math.cos(Math.PI / 9), SIN = Math.sin(Math.PI / 9);

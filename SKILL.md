@@ -2,7 +2,7 @@
 name: demian-trade-suite
 slug: demian-trade-suite
 displayName: 外贸单证与装柜工作台
-version: 1.0.2
+version: 1.0.3
 summary: 外贸单证（PI/CI/PL/合同/报关）与集装箱装柜计算一体工作台，含 JSON→PDF 出单流水线。
 license: MIT
 category: business-ops

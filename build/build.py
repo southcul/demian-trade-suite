@@ -24,6 +24,7 @@ def main() -> None:
     nav = read(PARTS / "nav.html")
     loading = read(PARTS / "loading.html")
     css = read(PARTS / "loading.css")
+    theme = read(PARTS / "theme.css")
     js = read(PARTS / "loading.js")
 
     # 2) nav inside app-layout
@@ -56,7 +57,7 @@ def main() -> None:
     # 5) styles
     anchor = "\n  </style>\n</head>"
     assert html.count(anchor) == 1, "style anchor"
-    html = html.replace(anchor, "\n" + css + "\n  </style>\n</head>", 1)
+    html = html.replace(anchor, "\n" + css + "\n" + theme + "\n  </style>\n</head>", 1)
 
     # 6) loader JS after the doc-suite init()
     anchor = "\n  init();\n</script>"
