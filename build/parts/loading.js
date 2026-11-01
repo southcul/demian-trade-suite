@@ -24,7 +24,7 @@
 
   var state = {
     tab: 'container', model: '40HQ', items: [], nextId: 1,
-    results: [], stats: null, scale: 1, ox: 0, oy: 0,
+    results: [], stats: null, anim: null, animSteps: 0, scale: 1, ox: 0, oy: 0,
     drag: false, lx: 0, ly: 0, transparent: false
   };
   var view = { w: 0, h: 0, dpr: 1 };
@@ -256,6 +256,7 @@
   /* ---------------- 排布引擎（整排整层堆码） ---------------- */
   function lgCalc() {
     lgSync();
+    lgStopAnim(true);
     var v = vehicle();
     var containerVol = v.w * v.h * v.d;
     var placed = [];
@@ -423,6 +424,7 @@
       nEst: nEst, depthUse: cursor / v.d * 100
     };
 
+    lgBuildAnimSteps();
     lgPaintStats();
     lgRenderSteps();
     lgDraw();
@@ -468,6 +470,8 @@
     tip.textContent = msg;
     $('#lgEmpty').style.display = s.packed > 0 ? 'none' : 'flex';
     $('#lgBtnToDocs').disabled = s.packed === 0;
+    var animBtn = document.getElementById('lgAnimBtn');
+    if (animBtn) animBtn.disabled = s.packed === 0;
   }
 
   function lgRenderSteps() {
@@ -605,22 +609,30 @@
     // 等轴测画家算法：按「到相机距离」由远及近绘制（x/y/z 同时增大即靠近观察者）
     // 同一列（同一 SKU、同一排、同一列位）的箱体合并成一个竖块，
     // 只画外露的顶面/正面/最左侧面，避免等轴测下逐箱绘制产生的接缝与透叠。
+    var anim = state.anim;
+    var maxStep = anim ? anim.progress : Infinity;
+    var highlightStep = anim ? anim.progress : -1;
+    var visible = [];
     var rowMax = {};
     state.results.forEach(function (p) {
+      if (p.animStep !== undefined && p.animStep > maxStep) return;
+      visible.push(p);
       var rk = p.itemId + '|' + p.row;
       rowMax[rk] = Math.max(rowMax[rk] || 0, p.col);
     });
     var stacks = {};
-    state.results.forEach(function (p) {
+    visible.forEach(function (p) {
       var k = p.itemId + '|' + p.row + '|' + p.col;
       var st = stacks[k];
       if (!st) {
         st = stacks[k] = {
           x: p.x, z: p.z, w: p.bw, d: p.bd, h: p.y + p.h,
-          color: p.color, edgeRight: p.col === rowMax[p.itemId + '|' + p.row]
+          color: p.color, edgeRight: p.col === rowMax[p.itemId + '|' + p.row],
+          highlight: p.animStep === highlightStep
         };
       } else {
         st.h = Math.max(st.h, p.y + p.h);
+        if (p.animStep === highlightStep) st.highlight = true;
       }
     });
     var list = Object.keys(stacks).map(function (k) { return stacks[k]; });
@@ -633,11 +645,11 @@
       var alpha = 1;
       if (state.transparent && i > total * 0.25) alpha = 0.22;
       if (b.usePallet) { /* pallet base drawn separately if needed */ }
-      lgBlock(b.x, 0, b.z, b.w, b.h, b.d, b.color, stroke, alpha, b.edgeRight);
+      lgBlock(b.x, 0, b.z, b.w, b.h, b.d, b.color, stroke, alpha, b.edgeRight, b.highlight);
     }
   }
 
-  function lgBlock(x, y, z, w, h, d, color, stroke, alpha, edgeRight) {
+  function lgBlock(x, y, z, w, h, d, color, stroke, alpha, edgeRight, highlight) {
     // 相机在 +X / +Z 方向：可见的是 max-Z（正面）与 max-X（右侧）两个侧面
     var p1 = lgProject(x + w, y, z);
     var p2 = lgProject(x + w, y, z + d);
@@ -654,6 +666,11 @@
       ctx.fillStyle = fill; ctx.fill();
       // 2px 同色描边盖住相邻多边形的抗锯齿缝
       ctx.strokeStyle = fill; ctx.lineWidth = 2; ctx.lineJoin = 'miter'; ctx.stroke();
+      if (highlight) {
+        ctx.strokeStyle = '#c8a25f';
+        ctx.lineWidth = 1.4;
+        ctx.stroke();
+      }
     }
 
     // 顶面
@@ -670,6 +687,124 @@
     ctx.beginPath(); ctx.moveTo(p3.x, p3.y); ctx.lineTo(p2.x, p2.y); ctx.lineTo(p6.x, p6.y); ctx.lineTo(p7.x, p7.y); ctx.closePath();
     seal(color);
     ctx.globalAlpha = 1;
+  }
+
+
+  /* ---------------- 装柜动画演示 ---------------- */
+  function lgBuildAnimSteps() {
+    var order = {}, steps = 0;
+    state.results.forEach(function (p) {
+      var k = p.itemId + '|' + p.row + '|' + p.layers;
+      if (order[k] === undefined) { order[k] = steps++; }
+      p.animStep = order[k];
+    });
+    state.animSteps = steps;
+  }
+
+  function lgAnimSubText(step) {
+    var hit = [];
+    for (var i = 0; i < state.results.length; i++) {
+      if (state.results[i].animStep === step) hit.push(state.results[i]);
+    }
+    if (!hit.length) return '按装载顺序逐层演示';
+    var p = hit[0];
+    return p.name + ' · 第 ' + p.layers + ' 层 · ' + hit.length + ' 箱';
+  }
+
+  function lgUpdateAnimHud() {
+    var a = state.anim;
+    if (!a) return;
+    var stepEl = document.getElementById('lgAnimStep');
+    var barEl = document.getElementById('lgAnimBar');
+    var subEl = document.getElementById('lgAnimSub');
+    if (stepEl) stepEl.textContent = a.progress + ' / ' + a.steps;
+    if (barEl) barEl.style.width = (a.steps ? a.progress / a.steps * 100 : 0) + '%';
+    if (subEl) subEl.textContent = a.progress >= a.steps
+      ? '演示完成 · 共 ' + (state.stats ? state.stats.packed : 0) + ' 箱'
+      : lgAnimSubText(a.progress);
+  }
+
+  function lgAnimTick(ts) {
+    var a = state.anim;
+    if (!a || !a.playing) return;
+    var target = Math.min(a.steps, Math.floor((ts - a.started) / a.speed));
+    if (target !== a.progress) {
+      a.progress = target;
+      lgUpdateAnimHud();
+      lgDraw();
+    }
+    if (a.progress >= a.steps) { lgFinishAnim(); return; }
+    a.raf = requestAnimationFrame(lgAnimTick);
+  }
+
+  function lgStartAnim() {
+    if (!state.results.length || !state.stats || !state.stats.packed) {
+      lgToast('先填写货物并计算，再播放装柜演示', 'warn');
+      return;
+    }
+    lgStopAnim(true);
+    if (!state.animSteps) lgBuildAnimSteps();
+    var steps = state.animSteps || 1;
+    var speed = Math.max(20, Math.min(220, 7000 / steps));
+    state.anim = {
+      playing: true, progress: 0, steps: steps, speed: speed,
+      started: performance.now(), raf: 0
+    };
+    var btn = document.getElementById('lgAnimBtn');
+    if (btn) { btn.classList.add('is-on'); btn.textContent = 'Ⅱ 暂停'; }
+    var hud = document.getElementById('lgAnimHud');
+    if (hud) hud.classList.add('show');
+    lgUpdateAnimHud();
+    lgDraw();
+    lgAnimTick(performance.now());
+  }
+
+  function lgPauseAnim() {
+    var a = state.anim;
+    if (!a || !a.playing) return;
+    cancelAnimationFrame(a.raf);
+    a.playing = false;
+    var btn = document.getElementById('lgAnimBtn');
+    if (btn) { btn.classList.remove('is-on'); btn.textContent = '▶ 继续'; }
+  }
+
+  function lgResumeAnim() {
+    var a = state.anim;
+    if (!a) { lgStartAnim(); return; }
+    a.playing = true;
+    a.started = performance.now() - a.progress * a.speed;
+    var btn = document.getElementById('lgAnimBtn');
+    if (btn) { btn.classList.add('is-on'); btn.textContent = 'Ⅱ 暂停'; }
+    lgAnimTick(performance.now());
+  }
+
+  function lgFinishAnim() {
+    var a = state.anim;
+    if (!a) return;
+    cancelAnimationFrame(a.raf);
+    a.playing = false;
+    a.progress = a.steps;
+    var btn = document.getElementById('lgAnimBtn');
+    if (btn) { btn.classList.remove('is-on'); btn.textContent = '↻ 重播'; }
+    lgUpdateAnimHud();
+    lgDraw();
+  }
+
+  function lgStopAnim(silent) {
+    var a = state.anim;
+    if (a && a.raf) cancelAnimationFrame(a.raf);
+    state.anim = null;
+    var btn = document.getElementById('lgAnimBtn');
+    if (btn) { btn.classList.remove('is-on'); btn.textContent = '▶ 动画演示'; }
+    var hud = document.getElementById('lgAnimHud');
+    if (hud) hud.classList.remove('show');
+    if (!silent) lgDraw();
+  }
+
+  function lgToggleAnim() {
+    var a = state.anim;
+    if (!a || a.progress >= a.steps) { lgStartAnim(); return; }
+    if (a.playing) lgPauseAnim(); else lgResumeAnim();
   }
 
   /* ---------------- 保存 / 恢复 ---------------- */
@@ -715,9 +850,15 @@
   }
 
   function lgLoadDemo() {
+    lgStopAnim(true);
     state.items = demoItems();
     lgRenderCargo();
     lgCalc();
+    var sc = $('#lgScroll');
+    if (sc) sc.scrollTop = 0;
+    var n = state.stats ? state.stats.packed : 0;
+    lgToast('已载入示例：' + state.items.length + ' 种货物 / ' + n + ' 箱，正在演示装柜顺序', 'ok');
+    lgStartAnim();
   }
 
   function lgClear() {
@@ -806,8 +947,9 @@
     });
 
     $('#lgAddCargo').addEventListener('click', lgAddItem);
-    $('#lgCalc').addEventListener('click', function () { clearTimeout(calcTimer); lgCalc(); });
+    $('#lgCalc').addEventListener('click', function () { clearTimeout(calcTimer); lgCalc(); lgStartAnim(); });
     $('#lgBtnDemo').addEventListener('click', lgLoadDemo);
+    $('#lgAnimBtn').addEventListener('click', lgToggleAnim);
     $('#lgBtnToDocs').addEventListener('click', lgToDocs);
     $('#lgBtnPickDocs').addEventListener('click', lgFromDocs);
 
@@ -862,6 +1004,7 @@
       $('#wsMetaText').textContent = '单柜装载模拟 · 一键生成箱单';
       requestAnimationFrame(function () { lgResize(); });
     } else {
+      lgPauseAnim();
       $('#wsMetaText').textContent = 'PI / CI / PL / 合同 / 报关 · 实时 A4';
     }
     try { localStorage.setItem('ft_ws', loading ? 'loading' : 'docs'); } catch (e) {}

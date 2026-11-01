@@ -782,3 +782,82 @@ body {
   .top-bar input, .top-bar select { height: 34px; }
   .top-bar-actions .btn { height: 34px; }
 }
+
+/* ---------- 装柜动画演示 ---------- */
+.lg-btn-anim {
+  border-color: var(--gold);
+  color: var(--ink);
+  background: var(--gold-soft);
+}
+.lg-btn-anim:hover {
+  background: var(--gold);
+  border-color: var(--gold);
+  color: #fff;
+}
+.lg-btn-anim.is-on {
+  background: var(--ink);
+  border-color: var(--ink);
+  color: var(--gold-2);
+}
+.lg-btn-anim:disabled {
+  opacity: .45;
+  cursor: not-allowed;
+}
+.lg-anim-hud {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  z-index: 5;
+  width: 250px;
+  padding: 11px 13px 10px;
+  background: rgba(255, 253, 249, .95);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--gold);
+  box-shadow: 0 10px 28px rgba(16, 29, 51, .09);
+  opacity: 0;
+  transform: translateY(-4px);
+  pointer-events: none;
+  transition: opacity .2s ease, transform .2s ease;
+}
+.lg-anim-hud.show {
+  opacity: 1;
+  transform: none;
+}
+.lg-anim-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  font-size: 9.5px;
+  letter-spacing: .12em;
+  color: #857b6c;
+}
+.lg-anim-top b {
+  font-family: var(--font-num);
+  font-size: 11px;
+  color: var(--ink);
+  letter-spacing: 0;
+}
+.lg-anim-bar {
+  height: 2px;
+  margin: 9px 0 7px;
+  background: #ece3d4;
+  overflow: hidden;
+}
+.lg-anim-bar i {
+  display: block;
+  width: 0;
+  height: 100%;
+  background: var(--gold);
+  transition: width .08s linear;
+}
+.lg-anim-sub {
+  font-size: 10px;
+  color: var(--text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 1280px) {
+  .lg-anim-hud { width: 220px; }
+}

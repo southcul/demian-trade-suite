@@ -2,7 +2,7 @@
 name: demian-trade-suite
 slug: demian-trade-suite
 displayName: 外贸单证与装柜工作台
-version: 1.0.3
+version: 1.0.4
 summary: 外贸单证（PI/CI/PL/合同/报关）与集装箱装柜计算一体工作台，含 JSON→PDF 出单流水线。
 license: MIT
 category: business-ops
@@ -72,7 +72,7 @@ $py = "python"
 ```
 
 3. 读脚本打印的装载结果：已装/总箱数、CBM、装载率、重量饱和度、预计柜数。装不下会在 PDF 里标出未装数量。
-4. 需要交互调方向、间隙、托盘、堆码层数时，打开 `assets/workbench.html` 的「装柜计算」页。
+4. 需要交互调方向、间隙、托盘、堆码层数时，打开 `assets/workbench.html` 的「装柜计算」页。点「载入示例」或「开始计算」会自动播放逐层装柜动画，可暂停 / 继续 / 重播。
 
 ### C. 装柜结果 → 装箱单
 

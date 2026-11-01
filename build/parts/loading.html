@@ -9,6 +9,7 @@
         </div>
       </div>
       <div class="lg-head-right">
+        <button class="lg-btn lg-btn-anim" id="lgAnimBtn" title="按装载顺序逐层演示">▶ 动画演示</button>
         <button class="lg-btn" id="lgBtnPickDocs" title="读取「外贸单证」货物明细，按箱规反算体积与毛净重">从单证取货</button>
         <button class="lg-btn" id="lgBtnDemo">载入示例</button>
         <button class="lg-btn lg-btn-primary" id="lgBtnToDocs">生成单据 →</button>
@@ -54,9 +55,14 @@
 
         <div class="lg-stage" id="lgStage">
           <canvas id="lgCanvas"></canvas>
+          <div class="lg-anim-hud" id="lgAnimHud">
+            <div class="lg-anim-top"><span>装柜演示</span><b id="lgAnimStep">0 / 0</b></div>
+            <div class="lg-anim-bar"><i id="lgAnimBar"></i></div>
+            <div class="lg-anim-sub" id="lgAnimSub">按装载顺序逐层演示</div>
+          </div>
           <div class="lg-empty" id="lgEmpty">
             <b>填好货物，按「开始计算」</b>
-            <span>按 6 向最大空长方体排布，校验支撑、承压、堆层与重心</span>
+            <span>按品名分区、整排整层堆码，逐箱校验层数、承压与重心</span>
           </div>
           <div class="lg-tools">
             <button data-tool="print" title="打印装柜方案 / 导出 PDF">⎙</button>
