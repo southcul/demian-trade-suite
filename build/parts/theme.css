@@ -838,6 +838,15 @@ body {
   color: var(--ink);
   letter-spacing: 0;
 }
+.lg-anim-plan {
+  margin-top: 4px;
+  font-size: 9.5px;
+  letter-spacing: .03em;
+  color: #857b6c;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
 .lg-anim-bar {
   height: 2px;
   margin: 9px 0 7px;

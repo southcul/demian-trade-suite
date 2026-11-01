@@ -708,7 +708,8 @@
     }
     if (!hit.length) return '按装载顺序逐层演示';
     var p = hit[0];
-    return p.name + ' · 第 ' + p.layers + ' 层 · ' + hit.length + ' 箱';
+    var dims = [p.w, p.h, p.d].map(function (n) { return Math.round(n * 10) / 10; }).join('×');
+    return p.name + ' · ' + dims + ' cm · 第 ' + p.layers + ' 层 · ' + hit.length + ' 箱';
   }
 
   function lgUpdateAnimHud() {
@@ -719,6 +720,10 @@
     var subEl = document.getElementById('lgAnimSub');
     if (stepEl) stepEl.textContent = a.progress + ' / ' + a.steps;
     if (barEl) barEl.style.width = (a.steps ? a.progress / a.steps * 100 : 0) + '%';
+    var planEl = document.getElementById('lgAnimPlan');
+    if (planEl && state.stats) {
+      planEl.textContent = vehicle().name + ' · ' + state.stats.packed + ' 箱 · ' + state.items.length + ' 种货';
+    }
     if (subEl) subEl.textContent = a.progress >= a.steps
       ? '演示完成 · 共 ' + (state.stats ? state.stats.packed : 0) + ' 箱'
       : lgAnimSubText(a.progress);
@@ -803,8 +808,12 @@
 
   function lgToggleAnim() {
     var a = state.anim;
-    if (!a || a.progress >= a.steps) { lgStartAnim(); return; }
-    if (a.playing) lgPauseAnim(); else lgResumeAnim();
+    if (a && a.playing) { lgPauseAnim(); return; }
+    if (a && a.progress < a.steps) { lgResumeAnim(); return; }
+    // 播放前按当前输入重算，避免改完箱规立刻点演示时播放上一版方案
+    clearTimeout(calcTimer);
+    lgCalc();
+    lgStartAnim();
   }
 
   /* ---------------- 保存 / 恢复 ---------------- */
@@ -857,7 +866,7 @@
     var sc = $('#lgScroll');
     if (sc) sc.scrollTop = 0;
     var n = state.stats ? state.stats.packed : 0;
-    lgToast('已载入示例：' + state.items.length + ' 种货物 / ' + n + ' 箱，正在演示装柜顺序', 'ok');
+    lgToast('已载入示例数据（会覆盖当前货物）：' + state.items.length + ' 种 / ' + n + ' 箱，正在演示', 'ok');
     lgStartAnim();
   }
 
@@ -933,6 +942,7 @@
       if (f === 'qty' || f === 'stackLayers' || f === 'pcsCtn') n = Math.floor(n);
       it[f] = n;
       lgUpdateHint(it);
+      if (state.anim) lgStopAnim(true);
       clearTimeout(calcTimer);
       calcTimer = setTimeout(lgCalc, 550);
     });
